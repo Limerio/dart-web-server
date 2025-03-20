@@ -1,0 +1,61 @@
+name: Create Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*" # Triggers on tags that match v*.*.* pattern (e.g., v1.0.0, v2.3.1)
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Dart
+        uses: dart-lang/setup-dart@v1
+
+      - name: Get dependencies
+        run: dart pub get
+
+      - name: Build for Linux
+        run: |
+          mkdir -p builds/linux
+          dart compile exe bin/main.dart -o builds/linux/app
+
+      - name: Build for Windows
+        run: |
+          mkdir -p builds/windows
+          dart compile exe bin/main.dart -o builds/windows/app.exe
+
+      - name: Build for macOS
+        run: |
+          mkdir -p builds/macos
+          dart compile exe bin/main.dart -o builds/macos/app
+
+      - name: Zip artifacts
+        run: |
+          cd builds
+          zip -r linux-build.zip linux/
+          zip -r windows-build.zip windows/
+          zip -r macos-build.zip macos/
+
+      - name: Get tag name
+        id: get_version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+
+      - name: Create GitHub Release
+        id: create_release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ steps.get_version.outputs.VERSION }}
+          name: Release ${{ steps.get_version.outputs.VERSION }}
+          draft: true
+          prerelease: false
+          files: |
+            builds/linux-build.zip
+            builds/windows-build.zip
+            builds/macos-build.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
