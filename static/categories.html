@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Categories - Bookshelf</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="/js/api.js" defer></script>
+    <script src="/js/auth.js" defer></script>
+  </head>
+  <body class="bg-gray-50 min-h-screen">
+    <nav class="bg-indigo-600 shadow-md">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16">
+          <div class="flex">
+            <div class="flex-shrink-0 flex items-center">
+              <h1 class="text-white text-xl font-bold">Bookshelf</h1>
+            </div>
+            <div class="hidden flex items-center sm:ml-6 sm:flex sm:space-x-8">
+              <a
+                href="index.html"
+                class="text-white hover:text-gray-200 px-3 py-2 text-sm font-medium"
+                >Home</a
+              >
+              <a
+                href="books.html"
+                class="text-white hover:text-gray-200 px-3 py-2 text-sm font-medium"
+                >Books</a
+              >
+              <a
+                href="categories.html"
+                class="border-b-2 border-white text-white px-3 py-2 text-sm font-medium"
+                aria-current="page"
+                >Categories</a
+              >
+              <a
+                href="profile.html"
+                class="text-white hover:text-gray-200 px-3 py-2 text-sm font-medium"
+                >Profile</a
+              >
+            </div>
+          </div>
+          <div class="flex items-center">
+            <a
+              href="login.html"
+              class="text-white hover:text-gray-200 px-3 py-2 text-sm font-medium"
+              >Login</a
+            >
+            <a
+              href="register.html"
+              class="ml-4 bg-white text-indigo-600 hover:bg-gray-100 px-4 py-2 rounded-md text-sm font-medium"
+              >Register</a
+            >
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+      <div class="px-4 py-6 sm:px-0">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-2xl font-bold text-gray-800">Categories</h2>
+          <button
+            class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-md"
+          >
+            Add New Category
+          </button>
+        </div>
+
+        <div
+          id="categoriesContainer"
+          class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
+        >
+          <!-- Categories will be loaded dynamically -->
+        </div>
+      </div>
+    </main>
+
+    <footer class="bg-white">
+      <div
+        class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 border-t border-gray-200"
+      >
+        <p class="text-center text-gray-500 text-sm">
+          © 2025 Bookshelf. All rights reserved.
+        </p>
+      </div>
+    </footer>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", async function () {
+        try {
+          // Load all categories
+          const categories = await CategoryAPI.getAllCategories();
+
+          // Get the categories container
+          const categoriesContainer = document.getElementById(
+            "categoriesContainer"
+          );
+
+          if (categoriesContainer) {
+            if (categories.length === 0) {
+              categoriesContainer.innerHTML = "<p>No categories found.</p>";
+            } else {
+              categoriesContainer.innerHTML = categories
+                .map(
+                  (category) => `
+                <div class="bg-white overflow-hidden shadow-md rounded-lg">
+                  <div class="px-6 py-5">
+                    <div class="flex justify-between items-center mb-4">
+                      <h3 class="text-lg font-medium text-gray-900">${
+                        category.name
+                      }</h3>
+                    </div>
+                    <p class="text-gray-600 text-sm mb-4">
+                      ${category.description || "No description available."}
+                    </p>
+                    <div class="border-t border-gray-200 pt-4 flex justify-between">
+                      <div>
+                        <a href="books.html?category=${
+                          category.id
+                        }" class="text-indigo-600 hover:text-indigo-900 text-sm">View Books</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              `
+                )
+                .join("");
+            }
+          }
+        } catch (error) {
+          console.error("Failed to load categories:", error);
+          alert("Failed to load categories");
+        }
+      });
+    </script>
+  </body>
+</html>

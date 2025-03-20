@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bookshelf - Your Book Management System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-50 min-h-screen">
+    <nav class="bg-indigo-600 shadow-md">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16">
+          <div class="flex">
+            <div class="flex-shrink-0 flex items-center">
+              <h1 class="text-white text-xl font-bold">Bookshelf</h1>
+            </div>
+            <div class="hidden flex items-center sm:ml-6 sm:flex sm:space-x-8">
+              <a
+                href="index.html"
+                class="border-b-2 border-white text-white px-3 py-2 text-sm font-medium"
+                aria-current="page"
+                >Home</a
+              >
+              <a
+                href="books.html"
+                class="text-white hover:text-gray-200 px-3 py-2 text-sm font-medium"
+                >Books</a
+              >
+              <a
+                href="categories.html"
+                class="text-white hover:text-gray-200 px-3 py-2 text-sm font-medium"
+                >Categories</a
+              >
+              <a
+                href="profile.html"
+                class="text-white hover:text-gray-200 px-3 py-2 text-sm font-medium"
+                >Profile</a
+              >
+            </div>
+          </div>
+          <div class="flex items-center">
+            <a
+              href="login.html"
+              class="text-white hover:text-gray-200 px-3 py-2 text-sm font-medium"
+              >Login</a
+            >
+            <a
+              href="register.html"
+              class="ml-4 bg-white text-indigo-600 hover:bg-gray-100 px-4 py-2 rounded-md text-sm font-medium"
+              >Register</a
+            >
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+      <div class="px-4 py-6 sm:px-0">
+        <div class="bg-white rounded-lg shadow-md p-6">
+          <h2 class="text-2xl font-bold text-gray-800 mb-4">
+            Welcome to Bookshelf
+          </h2>
+          <p class="text-gray-600">
+            Your personal book management system. Browse your collection,
+            organize by categories, and keep track of your reading progress.
+          </p>
+          <div class="mt-6">
+            <a
+              href="books.html"
+              class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700"
+            >
+              View Book Collection
+            </a>
+          </div>
+        </div>
+
+        <div class="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div class="bg-white overflow-hidden shadow rounded-lg">
+            <div class="px-4 py-5 sm:p-6">
+              <h3 class="text-lg font-medium text-gray-900">Recent Books</h3>
+              <div class="mt-4">
+                <ul id="recentBooks" class="divide-y divide-gray-200">
+                  <li class="py-3">Loading books...</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="bg-white overflow-hidden shadow rounded-lg">
+            <div class="px-4 py-5 sm:p-6">
+              <h3 class="text-lg font-medium text-gray-900">Categories</h3>
+              <div class="mt-4">
+                <ul id="categories" class="divide-y divide-gray-200">
+                  <li class="py-3">Loading categories...</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="bg-white overflow-hidden shadow rounded-lg">
+            <div class="px-4 py-5 sm:p-6">
+              <h3 class="text-lg font-medium text-gray-900">Reading Stats</h3>
+              <div id="readingStats" class="mt-4">
+                <p class="text-gray-600">Loading stats...</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="bg-white">
+      <div
+        class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 border-t border-gray-200"
+      >
+        <p class="text-center text-gray-500 text-sm">
+          © 2025 Bookshelf. All rights reserved.
+        </p>
+      </div>
+    </footer>
+
+    <script>
+      // BookAPI and UserAPI objects for interacting with the backend
+      const BookAPI = {
+        getAllBooks: async function () {
+          const response = await fetch("/api/books");
+          if (!response.ok) {
+            throw new Error("Failed to fetch books");
+          }
+          return await response.json();
+        },
+      };
+
+      const CategoryAPI = {
+        getAllCategories: async function () {
+          const response = await fetch("/api/categories");
+          if (!response.ok) {
+            throw new Error("Failed to fetch categories");
+          }
+          return await response.json();
+        },
+      };
+
+      const UserAPI = {
+        getReadingStats: async function () {
+          const response = await fetch("/api/user/reading-stats");
+          if (!response.ok) {
+            throw new Error("Failed to fetch reading stats");
+          }
+          return await response.json();
+        },
+
+        // Check if user is logged in
+        isLoggedIn: function () {
+          return localStorage.getItem("token") !== null;
+        },
+      };
+
+      // Function to check if user is authenticated
+      function requireAuth() {
+        if (!UserAPI.isLoggedIn()) {
+          return false;
+        }
+        return true;
+      }
+
+      // Function to update the UI navigation based on authentication
+      function updateNavigation() {
+        const authSection = document.querySelector(".flex.items-center");
+        if (UserAPI.isLoggedIn()) {
+          authSection.innerHTML = `
+            <a
+              href="profile.html"
+              class="text-white hover:text-gray-200 px-3 py-2 text-sm font-medium"
+            >My Profile</a>
+            <button
+              id="logoutButton"
+              class="ml-4 bg-white text-indigo-600 hover:bg-gray-100 px-4 py-2 rounded-md text-sm font-medium"
+            >Logout</button>
+          `;
+
+          // Add event listener to logout button
+          document
+            .getElementById("logoutButton")
+            .addEventListener("click", function () {
+              localStorage.removeItem("token");
+              window.location.href = "/login.html";
+            });
+        }
+      }
+
+      // Load data and update UI when DOM is ready
+      document.addEventListener("DOMContentLoaded", async function () {
+        // Update navigation based on auth status
+        updateNavigation();
+
+        try {
+          // Fetch and display recent books
+          const books = await BookAPI.getAllBooks();
+          const recentBooksElement = document.getElementById("recentBooks");
+
+          if (books.length === 0) {
+            recentBooksElement.innerHTML =
+              '<li class="py-3">No books found</li>';
+          } else {
+            // Display only the 5 most recent books
+            const recentBooks = books.slice(0, 5);
+            recentBooksElement.innerHTML = recentBooks
+              .map(
+                (book) => `
+                <li class="py-3">
+                  <a href="/book-details.html?id=${book.id}" class="text-indigo-600 hover:text-indigo-800">
+                    ${book.title}
+                  </a>
+                  <p class="text-sm text-gray-500">by ${book.author}</p>
+                </li>
+              `
+              )
+              .join("");
+          }
+
+          // Fetch and display categories
+          const categories = await CategoryAPI.getAllCategories();
+          const categoriesElement = document.getElementById("categories");
+
+          if (categories.length === 0) {
+            categoriesElement.innerHTML =
+              '<li class="py-3">No categories found</li>';
+          } else {
+            categoriesElement.innerHTML = categories
+              .map(
+                (category) => `
+                <li class="py-3">
+                  <a href="/books.html?category=${
+                    category.id
+                  }" class="text-indigo-600 hover:text-indigo-800">
+                    ${category.name}
+                  </a>
+                  <p class="text-sm text-gray-500">${
+                    category.description
+                      ? category.description.substring(0, 50) + "..."
+                      : "No description"
+                  }</p>
+                </li>
+              `
+              )
+              .join("");
+          }
+
+          // Fetch and display reading stats if user is logged in
+          const readingStatsElement = document.getElementById("readingStats");
+          if (UserAPI.isLoggedIn()) {
+            try {
+              const stats = await UserAPI.getReadingStats();
+              readingStatsElement.innerHTML = `
+                <p class="text-gray-600">Books read: ${stats.booksRead || 0}</p>
+                <p class="text-gray-600">Currently reading: ${
+                  stats.currentlyReading || 0
+                }</p>
+                <p class="text-gray-600">Pages read: ${stats.pagesRead || 0}</p>
+              `;
+            } catch (error) {
+              readingStatsElement.innerHTML = `
+                <p class="text-gray-600">Books read: 0</p>
+                <p class="text-gray-600">Currently reading: 0</p>
+                <p class="text-gray-600">Pages read: 0</p>
+              `;
+            }
+          } else {
+            readingStatsElement.innerHTML = `
+              <p class="text-gray-600">Please <a href="/login.html" class="text-indigo-600 hover:text-indigo-800">login</a> to see your reading stats</p>
+            `;
+          }
+        } catch (error) {
+          console.error("Error loading data:", error);
+        }
+      });
+    </script>
+  </body>
+</html>

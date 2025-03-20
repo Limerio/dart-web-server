@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profile - Bookshelf</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="/js/api.js" defer></script>
+    <script src="/js/auth.js" defer></script>
+  </head>
+  <body class="bg-gray-50 min-h-screen">
+    <nav class="bg-indigo-600 shadow-md">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16">
+          <div class="flex">
+            <div class="flex-shrink-0 flex items-center">
+              <h1 class="text-white text-xl font-bold">Bookshelf</h1>
+            </div>
+            <div class="hidden flex items-center sm:ml-6 sm:flex sm:space-x-8">
+              <a
+                href="index.html"
+                class="text-white hover:text-gray-200 px-3 py-2 text-sm font-medium"
+                >Home</a
+              >
+              <a
+                href="books.html"
+                class="text-white hover:text-gray-200 px-3 py-2 text-sm font-medium"
+                >Books</a
+              >
+              <a
+                href="categories.html"
+                class="text-white hover:text-gray-200 px-3 py-2 text-sm font-medium"
+                >Categories</a
+              >
+              <a
+                href="profile.html"
+                class="border-b-2 border-white text-white px-3 py-2 text-sm font-medium"
+                aria-current="page"
+                >Profile</a
+              >
+            </div>
+          </div>
+          <div class="flex items-center">
+            <a
+              href="#"
+              class="text-white hover:text-gray-200 px-3 py-2 text-sm font-medium"
+              >Logout</a
+            >
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+      <div class="px-4 py-6 sm:px-0">
+        <div class="bg-white shadow-md rounded-lg overflow-hidden">
+          <div class="px-6 py-5 border-b border-gray-200">
+            <h2 class="text-2xl font-bold text-gray-800">User Profile</h2>
+          </div>
+
+          <div class="p-6">
+            <div class="flex flex-col md:flex-row">
+              <div class="md:w-1/3 mb-6 md:mb-0">
+                <div class="flex flex-col items-center">
+                  <div
+                    class="w-32 h-32 bg-indigo-200 rounded-full flex items-center justify-center mb-4"
+                  >
+                    <span class="text-4xl text-indigo-700 font-bold">JD</span>
+                  </div>
+                  <button class="text-indigo-600 hover:text-indigo-900 text-sm">
+                    Change Profile Picture
+                  </button>
+                </div>
+              </div>
+
+              <div class="md:w-2/3">
+                <form id="updateProfileForm">
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label
+                        for="first_name"
+                        class="block text-gray-700 text-sm font-medium mb-2"
+                        >Full Name</label
+                      >
+                      <input
+                        type="text"
+                        id="full_name"
+                        name="full_name"
+                        value="John Doe"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                      />
+                    </div>
+                    <div>
+                      <label
+                        for="email"
+                        class="block text-gray-700 text-sm font-medium mb-2"
+                        >Email Address</label
+                      >
+                      <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        value="john.doe@example.com"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="mt-6">
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">
+                      Reading Preferences
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div>
+                        <label
+                          for="favorite_genre"
+                          class="block text-gray-700 text-sm font-medium mb-2"
+                          >Favorite Genre</label
+                        >
+                        <select
+                          id="favorite_genre"
+                          name="favorite_genre"
+                          class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                        >
+                          <option>Science Fiction</option>
+                          <option>Mystery</option>
+                          <option>Fantasy</option>
+                          <option>Non-Fiction</option>
+                          <option>Biography</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label
+                          for="reading_goal"
+                          class="block text-gray-700 text-sm font-medium mb-2"
+                          >Annual Reading Goal</label
+                        >
+                        <input
+                          type="number"
+                          id="reading_goal"
+                          name="reading_goal"
+                          value="52"
+                          class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                        />
+                      </div>
+                      <div>
+                        <label
+                          for="preferred_format"
+                          class="block text-gray-700 text-sm font-medium mb-2"
+                          >Preferred Format</label
+                        >
+                        <select
+                          id="preferred_format"
+                          name="preferred_format"
+                          class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                        >
+                          <option>Hardcover</option>
+                          <option>Paperback</option>
+                          <option>E-book</option>
+                          <option>Audiobook</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label
+                          for="reading_pace"
+                          class="block text-gray-700 text-sm font-medium mb-2"
+                          >Reading Pace</label
+                        >
+                        <select
+                          id="reading_pace"
+                          name="reading_pace"
+                          class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                        >
+                          <option>1 book per week</option>
+                          <option>2-3 books per month</option>
+                          <option>1 book per month</option>
+                          <option>At my own pace</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="mt-6">
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">
+                      Account Settings
+                    </h3>
+                    <div class="space-y-4">
+                      <div class="flex items-start">
+                        <div class="flex items-center h-5">
+                          <input
+                            id="email_notifications"
+                            name="email_notifications"
+                            type="checkbox"
+                            checked
+                            class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                          />
+                        </div>
+                        <div class="ml-3 text-sm">
+                          <label
+                            for="email_notifications"
+                            class="font-medium text-gray-700"
+                            >Email Notifications</label
+                          >
+                          <p class="text-gray-500">
+                            Receive email updates about your books, reading
+                            progress, and recommendations.
+                          </p>
+                        </div>
+                      </div>
+
+                      <div class="flex items-start">
+                        <div class="flex items-center h-5">
+                          <input
+                            id="public_profile"
+                            name="public_profile"
+                            type="checkbox"
+                            class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                          />
+                        </div>
+                        <div class="ml-3 text-sm">
+                          <label
+                            for="public_profile"
+                            class="font-medium text-gray-700"
+                            >Public Profile</label
+                          >
+                          <p class="text-gray-500">
+                            Make your reading activity and book collections
+                            visible to other users.
+                          </p>
+                        </div>
+                      </div>
+
+                      <div class="flex items-start">
+                        <div class="flex items-center h-5">
+                          <input
+                            id="share_reading"
+                            name="share_reading"
+                            type="checkbox"
+                            checked
+                            class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                          />
+                        </div>
+                        <div class="ml-3 text-sm">
+                          <label
+                            for="share_reading"
+                            class="font-medium text-gray-700"
+                            >Share Reading Stats</label
+                          >
+                          <p class="text-gray-500">
+                            Allow Bookshelf to use your reading data for
+                            improving recommendations.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="mt-6 pt-6 border-t border-gray-200">
+                    <div class="flex items-center justify-between">
+                      <div>
+                        <button
+                          type="button"
+                          class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        >
+                          Change Password
+                        </button>
+                      </div>
+                      <div>
+                        <button
+                          type="submit"
+                          class="bg-indigo-600 py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        >
+                          Save Changes
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-6 bg-white shadow-md rounded-lg overflow-hidden">
+          <div class="px-6 py-5 border-b border-gray-200">
+            <h2 class="text-xl font-bold text-gray-800">Reading Statistics</h2>
+          </div>
+
+          <div class="p-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div class="bg-gray-50 rounded-lg p-4 text-center">
+                <div class="text-3xl font-bold text-indigo-600 mb-2">12</div>
+                <div class="text-sm text-gray-500">Books Read This Year</div>
+              </div>
+
+              <div class="bg-gray-50 rounded-lg p-4 text-center">
+                <div class="text-3xl font-bold text-indigo-600 mb-2">3,456</div>
+                <div class="text-sm text-gray-500">Pages Read</div>
+              </div>
+
+              <div class="bg-gray-50 rounded-lg p-4 text-center">
+                <div class="text-3xl font-bold text-indigo-600 mb-2">23%</div>
+                <div class="text-sm text-gray-500">Towards Annual Goal</div>
+              </div>
+            </div>
+
+            <div class="mt-6">
+              <h3 class="text-lg font-medium text-gray-900 mb-4">
+                Recently Completed Books
+              </h3>
+              <ul class="divide-y divide-gray-200">
+                <li class="py-4 flex">
+                  <div
+                    class="w-12 h-16 bg-gray-200 rounded flex-shrink-0"
+                  ></div>
+                  <div class="ml-4">
+                    <p class="text-sm font-medium text-gray-900">
+                      The Great Gatsby
+                    </p>
+                    <p class="text-sm text-gray-500">F. Scott Fitzgerald</p>
+                    <p class="text-xs text-gray-400 mt-1">
+                      Completed on May 12, 2023
+                    </p>
+                  </div>
+                </li>
+                <li class="py-4 flex">
+                  <div
+                    class="w-12 h-16 bg-gray-200 rounded flex-shrink-0"
+                  ></div>
+                  <div class="ml-4">
+                    <p class="text-sm font-medium text-gray-900">
+                      Sapiens: A Brief History of Humankind
+                    </p>
+                    <p class="text-sm text-gray-500">Yuval Noah Harari</p>
+                    <p class="text-xs text-gray-400 mt-1">
+                      Completed on April 28, 2023
+                    </p>
+                  </div>
+                </li>
+                <li class="py-4 flex">
+                  <div
+                    class="w-12 h-16 bg-gray-200 rounded flex-shrink-0"
+                  ></div>
+                  <div class="ml-4">
+                    <p class="text-sm font-medium text-gray-900">The Hobbit</p>
+                    <p class="text-sm text-gray-500">J.R.R. Tolkien</p>
+                    <p class="text-xs text-gray-400 mt-1">
+                      Completed on April 5, 2023
+                    </p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-6 bg-white shadow-md rounded-lg overflow-hidden">
+          <div class="px-6 py-5 border-b border-gray-200">
+            <h2 class="text-xl font-bold text-gray-800">Privacy & Data</h2>
+          </div>
+
+          <div class="p-6">
+            <p class="text-sm text-gray-600 mb-4">
+              Manage your data and privacy settings for your Bookshelf account.
+            </p>
+
+            <div class="space-y-4">
+              <button
+                class="block text-sm text-indigo-600 hover:text-indigo-900"
+              >
+                Download your data
+              </button>
+
+              <button
+                class="block text-sm text-indigo-600 hover:text-indigo-900"
+              >
+                Delete your reading history
+              </button>
+
+              <button class="block text-sm text-red-600 hover:text-red-900">
+                Delete account
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="bg-white mt-auto">
+      <div
+        class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 border-t border-gray-200"
+      >
+        <p class="text-center text-gray-500 text-sm">
+          © 2025 Bookshelf. All rights reserved.
+        </p>
+      </div>
+    </footer>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", async function () {
+        // Check if user is logged in
+        if (!requireAuth()) return;
+
+        try {
+          const userData = await UserAPI.getProfile();
+
+          document.getElementById("full_name").value = userData.full_name;
+          document.getElementById("email").value = userData.email;
+
+          const updateForm = document.getElementById("updateProfileForm");
+
+          if (updateForm) {
+            updateForm.addEventListener("submit", async (e) => {
+              e.preventDefault();
+
+              const updatedData = {
+                full_name: document.getElementById("full_name").value,
+                email: document.getElementById("email").value,
+              };
+
+              const newPassword = document.getElementById("newPassword").value;
+              if (newPassword) {
+                updatedData.password = newPassword;
+              }
+
+              try {
+                await UserAPI.updateProfile(updatedData);
+                alert("Profile updated successfully!");
+                window.location.reload();
+              } catch (error) {
+                alert("Failed to update profile: " + error.message);
+              }
+            });
+          }
+
+          const logoutButton = document.getElementById("logoutButton");
+
+          if (logoutButton) {
+            logoutButton.addEventListener("click", (e) => {
+              e.preventDefault();
+              logout();
+            });
+          }
+        } catch (error) {
+          console.error("Failed to load profile:", error);
+          alert("Failed to load user profile");
+        }
+      });
+    </script>
+  </body>
+</html>
