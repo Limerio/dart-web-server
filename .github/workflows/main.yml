@@ -9,6 +9,22 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: postgres
+          POSTGRES_DB: bookshop
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
       - uses: actions/checkout@v4
       - uses: dart-lang/setup-dart@v1
@@ -17,3 +33,9 @@ jobs:
       - run: dart format --output=none --set-exit-if-changed .
       - run: dart analyze
       - run: dart test
+        env:
+          DB_HOST: localhost
+          DB_PORT: 5432
+          DB_NAME: bookshop
+          DB_USER: postgres
+          DB_PASSWORD: postgres
