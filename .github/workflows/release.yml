@@ -22,17 +22,17 @@ jobs:
       - name: Build for Linux
         run: |
           mkdir -p builds/linux
-          dart compile exe bin/main.dart -o builds/linux/app
+          dart compile exe bin/server.dart -o builds/linux/app
 
       - name: Build for Windows
         run: |
           mkdir -p builds/windows
-          dart compile exe bin/main.dart -o builds/windows/app.exe
+          dart compile exe bin/server.dart -o builds/windows/app.exe
 
       - name: Build for macOS
         run: |
           mkdir -p builds/macos
-          dart compile exe bin/main.dart -o builds/macos/app
+          dart compile exe bin/server.dart -o builds/macos/app
 
       - name: Zip artifacts
         run: |
