@@ -12,7 +12,6 @@ void main() {
   late String userToken;
 
   setUpAll(() async {
-    // Start server and get test tokens
     final serverInfo = await testUtils.startServer();
     baseUrl = serverInfo.url;
     adminToken = await testUtils.getAdminToken();
@@ -20,7 +19,6 @@ void main() {
   });
 
   tearDownAll(() async {
-    // Cleanup and stop the server
     await testUtils.stopServer();
   });
 
@@ -28,9 +26,7 @@ void main() {
     late int testBookId;
     late int testCategoryId;
 
-    // Setup a test category to use with books
     setUp(() async {
-      // Create test category with unique name to avoid duplicate key error
       final category = {
         'name': 'Test Category ${DateTime.now().millisecondsSinceEpoch}',
         'description': 'Category for testing books',
@@ -54,7 +50,6 @@ void main() {
       final categoryBody = json.decode(categoryResponse.body);
       testCategoryId = categoryBody['id'];
 
-      // Verify the category ID is not null
       expect(
         testCategoryId,
         isNotNull,
@@ -96,12 +91,10 @@ void main() {
         expect(body['title'], equals(newBook['title']));
         testBookId = body['id'];
 
-        // Verify the book ID is not null
         expect(testBookId, isNotNull, reason: 'Book ID should not be null');
       });
 
       test('should get all books without authentication', () async {
-        // First ensure we have a book to retrieve
         expect(
           testBookId,
           isNotNull,
@@ -222,7 +215,6 @@ void main() {
           reason: 'Failed to delete book: ${response.statusCode}',
         );
 
-        // Verify book is deleted
         final getResponse = await http.get(
           Uri.parse('$baseUrl/api/books/$testBookId'),
           headers: {'Content-Type': 'application/json'},

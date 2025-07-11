@@ -43,7 +43,6 @@ class DatabaseSeeder {
   final Random random = Random();
   late PostgreSQLConnection connection;
 
-  // Define category names that make sense for a bookstore
   final List<String> categoryNames = [
     'Fiction',
     'Non-Fiction',
@@ -61,7 +60,6 @@ class DatabaseSeeder {
     'Children\'s Books',
   ];
 
-  // Define publishing companies
   final List<String> publishers = [
     'Penguin Random House',
     'HarperCollins',
@@ -184,7 +182,6 @@ class DatabaseSeeder {
   }
 
   String _generateBookTitle() {
-    // Generate more realistic book titles
     final titleFormats = [
       () => 'The ${faker.lorem.word()} of ${faker.lorem.word().capitalize()}',
       () =>
@@ -206,7 +203,6 @@ class DatabaseSeeder {
   }
 }
 
-// Extension method to capitalize strings
 extension StringExtension on String {
   String capitalize() {
     return isEmpty ? this : this[0].toUpperCase() + substring(1);

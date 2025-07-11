@@ -12,7 +12,6 @@ void main() {
   late String userToken;
 
   setUpAll(() async {
-    // Start server and get test tokens
     final serverInfo = await testUtils.startServer();
     baseUrl = serverInfo.url;
     adminToken = await testUtils.getAdminToken();
@@ -20,7 +19,6 @@ void main() {
   });
 
   tearDownAll(() async {
-    // Cleanup and stop the server
     await testUtils.stopServer();
   });
 
@@ -118,7 +116,6 @@ void main() {
 
         expect(response.statusCode, equals(204));
 
-        // Verify category is deleted
         final getResponse = await http.get(
           Uri.parse('$baseUrl/api/categories/$testCategoryId'),
           headers: {'Content-Type': 'application/json'},

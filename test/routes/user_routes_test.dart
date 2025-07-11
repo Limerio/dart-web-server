@@ -12,7 +12,6 @@ void main() {
   late String userToken;
 
   setUpAll(() async {
-    // Start server and get test tokens
     final serverInfo = await testUtils.startServer();
     baseUrl = serverInfo.url;
     adminToken = await testUtils.getAdminToken();
@@ -20,12 +19,10 @@ void main() {
   });
 
   tearDownAll(() async {
-    // Cleanup and stop the server
     await testUtils.stopServer();
   });
 
   group('User API Tests', () {
-    // Registration tests
     group('Registration', () {
       test('should register a new user', () async {
         final newUser = {
@@ -66,7 +63,6 @@ void main() {
       test('should return 400 if required fields are missing', () async {
         final incompleteUser = {
           'email': 'incomplete@example.com',
-          // missing password and full_name
         };
 
         final response = await http.post(
@@ -79,7 +75,6 @@ void main() {
       });
     });
 
-    // Login tests
     group('Login', () {
       test('should login successfully with valid credentials', () async {
         final credentials = {
@@ -115,7 +110,6 @@ void main() {
       });
     });
 
-    // Profile tests
     group('Profile', () {
       test('should get user profile with valid token', () async {
         final response = await http.get(
@@ -142,7 +136,6 @@ void main() {
       });
     });
 
-    // Admin only routes
     group('Admin Routes', () {
       test('should get all users with admin token', () async {
         final response = await http.get(
@@ -171,12 +164,10 @@ void main() {
       });
     });
 
-    // CRUD operations with authentication
     group('User CRUD Operations', () {
       late int testUserId;
 
       setUp(() async {
-        // Create a test user to manipulate
         final newUser = {
           'email':
               'testcrud${DateTime.now().millisecondsSinceEpoch}@example.com',
@@ -190,7 +181,6 @@ void main() {
           body: json.encode(newUser),
         );
 
-        // Check if registration was successful
         expect(response.statusCode, equals(201));
         final body = json.decode(response.body);
         testUserId = body['user']['id'];
@@ -238,7 +228,6 @@ void main() {
 
         expect(response.statusCode, equals(204));
 
-        // Verify user is deleted
         final getResponse = await http.get(
           Uri.parse('$baseUrl/api/users/$testUserId'),
           headers: {
